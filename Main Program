@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft;
+using Excel= Microsoft.Office.Interop.Excel;
+using System.ComponentModel;
+
+
+
+namespace BatchFileWriter
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            User user = new User();
+            Switches switches = new Switches();
+            getUserInfo(user);
+            Console.WriteLine($"You entered {user.username} and {user.password}");
+            Console.ReadLine();
+            foreach (var item in switches.SNMP_LIST())
+            {
+                Console.WriteLine($"{switches.ip_add} {switches.barcode}");
+                Console.ReadLine();
+
+
+            }
+            // Get Information from User 
+            // This is to be done once; the rest will be done in a loop in a seperate method
+            //ADD TRY CATCH STATEMENT IN HERE 
+           
+        }
+            public static User getUserInfo(User user)
+            {
+
+                Console.WriteLine("What is your username?");
+                user.username = Console.ReadLine();
+                Console.WriteLine("What is your password?");
+                user.password = Console.ReadLine();
+                return user;
+
+            }
+
+
+
+
+        }
+    }
+
+
+
+
+            
+        
+        
+    
+
