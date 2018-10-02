@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using Microsoft;
 using Excel= Microsoft.Office.Interop.Excel;
 using System.ComponentModel;
-
+using System.IO;
+using System.Diagnostics;
 
 
 namespace BatchFileWriter
@@ -17,43 +18,34 @@ namespace BatchFileWriter
         {
             User user = new User();
             Switches switches = new Switches();
-            getUserInfo(user);
+            getExcel getExcel = new getExcel();
+            user.getUserInfo(user); 
             Console.WriteLine($"You entered {user.username} and {user.password}");
             Console.ReadLine();
-            foreach (var item in switches.SNMP_LIST())
-            {
-                Console.WriteLine($"{switches.ip_add} {switches.barcode}");
-                Console.ReadLine();
-
-
-            }
-            // Get Information from User 
-            // This is to be done once; the rest will be done in a loop in a seperate method
-            //ADD TRY CATCH STATEMENT IN HERE 
-           
-        }
-            public static User getUserInfo(User user)
-            {
-
-                Console.WriteLine("What is your username?");
-                user.username = Console.ReadLine();
-                Console.WriteLine("What is your password?");
-                user.password = Console.ReadLine();
-                return user;
-
-            }
-
-
-
+            getExcel.SNMP_LIST();
+            setCommands(user, switches); 
 
         }
-    }
 
 
-
-
+        //This creates the file and adds the commands. If you want to change the commands just edit the WriteLine 
+        //If you would like to do on other computers you edit the file path
+        //I may edit this to add it to tech files so that everyone can use it 
+        //or I may let the user manually type in a file path
+        public static void setCommands(User user, Switches switches)
+        {
+            StreamWriter writer = new StreamWriter(@"{filepath}");
+            writer.WriteLine($"telnet {switches.ip_add}");
+            writer.WriteLine($"{user.username}");
+            writer.WriteLine($"{user.password}");
+            writer.WriteLine($"conf t");
+            writer.WriteLine($"snmp-server locations {switches.barcode}");
+            writer.WriteLine($"do wr me");
+            writer.Close();
+            //This starts the batch file so that it will execute the code 
+            Process.Start("snmp.bat");
             
-        
-        
-    
+        }
 
+    }
+    
