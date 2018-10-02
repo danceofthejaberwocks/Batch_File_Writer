@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.ComponentModel;
+
+namespace BatchFileWriter
+{
+    class getExcel
+    {
+        Switches Switches = new Switches();
+       
+        public List<Switches> SNMP_LIST()
+        {
+            List<Switches> get_SNMP = new List<Switches>();
+            // Intialize Excel in this applications 
+            // Make a more scalable function in the future. Maybe ask the user to type in the file path 
+            // Only 
+            Excel.Application MyApp = new Excel.Application();
+            Excel.Workbook MyBook = MyApp.Workbooks.Open(@"C:\Users\smithsuzi\Documents\Report_Inventory_Errors.xlsx");
+            Excel.Worksheet MySheet = MyBook.Sheets[3];
+            Excel.Range range = MySheet.UsedRange;
+            int rowCount = range.Rows.Count;
+            int colCount = range.Columns.Count;
+
+            //This will grab values from excel sheet and set the properties of the switch object. The switch object has ip addresses and barcode 
+            //the barcode is the SNMP location 
+            for (int index = 1; index <= rowCount; index++)
+            {
+                //create an array of strings that is as big as the amount of columns and rows in excel spreadsheet 
+
+                System.Array MyValues = (System.Array)MySheet.get_Range("A" +
+                   index.ToString(), "D" + index.ToString()).Cells.Value;
+
+
+                get_SNMP.Add(new Switches
+                {
+                    ip_add = MyValues.GetValue(1, 2).ToString(),
+                    barcode = MyValues.GetValue(1, 5).ToString()
+                });
+                foreach (Switches item in get_SNMP)
+                {
+                    Console.WriteLine($"{item.ip_add} {item.barcode}");
+                    Console.ReadLine();
+                }
+            }
+            return get_SNMP;
+
+        }
+    }
+}
