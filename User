@@ -10,5 +10,21 @@ namespace BatchFileWriter
     {
         public string username { get; set; }
         public string password { get; set; }
+        // Get Information from User 
+        // This is to be done once; the rest will be done in a loop in a seperate method
+        //ADD TRY CATCH STATEMENT IN HERE 
+        //cwadmin
+        //cisco
+
+        public User getUserInfo(User user)
+        {
+
+            Console.WriteLine("What is your username?");
+            user.username = Console.ReadLine();
+            Console.WriteLine("What is your password?");
+            user.password = Console.ReadLine();
+            return user;
+
+        }
     }
 }
