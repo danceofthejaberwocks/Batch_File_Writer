@@ -22,8 +22,8 @@ namespace BatchFileWriter
             user.getUserInfo(user); 
             Console.WriteLine($"You entered {user.username} and {user.password}");
             Console.ReadLine();
-            getExcel.SNMP_LIST();
-            setCommands(user, switches); 
+            getExcel.SNMP_LIST(switches);
+            setCommands(user, switches, getExcel); 
 
         }
 
@@ -32,20 +32,33 @@ namespace BatchFileWriter
         //If you would like to do on other computers you edit the file path
         //I may edit this to add it to tech files so that everyone can use it 
         //or I may let the user manually type in a file path
-        public static void setCommands(User user, Switches switches)
+        public static void setCommands(User user, Switches switches, getExcel getExcel)
         {
-            StreamWriter writer = new StreamWriter(@"{filepath}");
-            writer.WriteLine($"telnet {switches.ip_add}");
-            writer.WriteLine($"{user.username}");
-            writer.WriteLine($"{user.password}");
-            writer.WriteLine($"conf t");
-            writer.WriteLine($"snmp-server locations {switches.barcode}");
-            writer.WriteLine($"do wr me");
-            writer.Close();
-            //This starts the batch file so that it will execute the code 
-            Process.Start("snmp.bat");
-            
-        }
 
+            foreach (var item in getExcel.SNMP_LIST(switches))
+            {
+               StreamWriter writer = new StreamWriter(@"C:\Users\smithsuzi\Documents\snmp.txt");
+                writer.WriteLine($"telnet {item.ip_add.ToString()}");
+                writer.WriteLine($"set user = {user.username}");
+                writer.WriteLine($"set pswd= {user.password}");
+                writer.WriteLine($"conf t");
+                writer.WriteLine($"snmp-server locations {item.barcode.ToString()}");
+                writer.WriteLine($"do wr me");
+                writer.Close();
+                //This starts the batch file so that it will execute the code 
+                //Process.Start("snmp.bat");
+            }
+        }
+ 
     }
+}
+
+
+
+
+
+            
+        
+        
     
+
