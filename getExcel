@@ -13,12 +13,12 @@ namespace BatchFileWriter
     {
         Switches Switches = new Switches();
        
-        public List<Switches> SNMP_LIST()
+        public List<Switches> SNMP_LIST(Switches switches)
         {
-            List<Switches> get_SNMP = new List<Switches>();
             // Intialize Excel in this applications 
             // Make a more scalable function in the future. Maybe ask the user to type in the file path 
-            // Only 
+
+
             Excel.Application MyApp = new Excel.Application();
             Excel.Workbook MyBook = MyApp.Workbooks.Open(@"C:\Users\smithsuzi\Documents\Report_Inventory_Errors.xlsx");
             Excel.Worksheet MySheet = MyBook.Sheets[3];
@@ -26,27 +26,30 @@ namespace BatchFileWriter
             int rowCount = range.Rows.Count;
             int colCount = range.Columns.Count;
 
+
+
+            // create a list of Switches objects that I will return to the main program 
+            List<Switches> get_SNMP = new List<Switches>();
+            
+            
             //This will grab values from excel sheet and set the properties of the switch object. The switch object has ip addresses and barcode 
-            //the barcode is the SNMP location 
+            //the barcode is the SNMP location
+            
             for (int index = 1; index <= rowCount; index++)
+
             {
                 //create an array of strings that is as big as the amount of columns and rows in excel spreadsheet 
 
-                System.Array MyValues = (System.Array)MySheet.get_Range("A" +
-                   index.ToString(), "D" + index.ToString()).Cells.Value;
+                Excel.Range range2 = MySheet.get_Range("A" + index.ToString(), "D" + index.ToString());
+                //Switches [] MyValues = new Switches []{ range2.Cells.Value};
+                switches.ip_add = range2.Cells.Value.ToString();
+                switches.barcode = range2.Cells.Value2.ToString();
 
-
-                get_SNMP.Add(new Switches
-                {
-                    ip_add = MyValues.GetValue(1, 2).ToString(),
-                    barcode = MyValues.GetValue(1, 5).ToString()
-                });
-                foreach (Switches item in get_SNMP)
-                {
-                    Console.WriteLine($"{item.ip_add} {item.barcode}");
-                    Console.ReadLine();
-                }
+                get_SNMP.Add(switches);
+               
             }
+
+            MyBook.Close();
             return get_SNMP;
 
         }
