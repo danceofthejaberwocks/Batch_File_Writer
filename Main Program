@@ -37,7 +37,7 @@ namespace BatchFileWriter
 
             foreach (var item in getExcel.SNMP_LIST(switches))
             {
-               StreamWriter writer = new StreamWriter(@"C:\Users\smithsuzi\Documents\snmp.txt");
+               StreamWriter writer = new StreamWriter(@"C:\INSERT FILE PATH\snmp.bat");
                 writer.WriteLine($"telnet {item.ip_add.ToString()}");
                 writer.WriteLine($"set user = {user.username}");
                 writer.WriteLine($"set pswd= {user.password}");
