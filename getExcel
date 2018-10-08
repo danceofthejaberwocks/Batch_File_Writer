@@ -20,7 +20,7 @@ namespace BatchFileWriter
 
 
             Excel.Application MyApp = new Excel.Application();
-            Excel.Workbook MyBook = MyApp.Workbooks.Open(@"C:\Users\smithsuzi\Documents\Report_Inventory_Errors.xlsx");
+            Excel.Workbook MyBook = MyApp.Workbooks.Open(@"C:\INSERT FILE PATH HERE);
             Excel.Worksheet MySheet = MyBook.Sheets[3];
             Excel.Range range = MySheet.UsedRange;
             int rowCount = range.Rows.Count;
